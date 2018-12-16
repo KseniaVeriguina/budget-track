@@ -9,9 +9,6 @@ const mongoose = require( 'mongoose' );
 // Grab our seeds function
 // const seeds = require('./seeds')
 
-// Connect to our database 'budget' (port 27017 by default)
-// const uri = 'mongodb://localhost:27017/budget'
-
 mongoose
 	// Connects to database
 	.connect( MONGODB_URI )
