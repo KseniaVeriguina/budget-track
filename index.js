@@ -1,7 +1,7 @@
 'use strict';
 
 const server = require('./api/server');
-const { PORT } = require('./api/utils/constants');
+const { PORT, MONGODB_URI } = require('./api/utils/constants');
 
 // Require mongoose package
 const mongoose = require( 'mongoose' );
@@ -10,15 +10,15 @@ const mongoose = require( 'mongoose' );
 // const seeds = require('./seeds')
 
 // Connect to our database 'budget' (port 27017 by default)
-const uri = 'mongodb://localhost:27017/budget'
+// const uri = 'mongodb://localhost:27017/budget'
 
 mongoose
 	// Connects to database
-	.connect( uri )
+	.connect( MONGODB_URI )
 	// if successful
 	.then(() => {
 		// Log this response
-		console.log( `Successfully connected to: ${uri}` )
+		console.log( `Successfully connected to: ${MONGODB_URI}` )
 		// seeds()
 	})
 	.catch(err => console.log(err.message))
