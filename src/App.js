@@ -59,16 +59,6 @@ class BudgetApp extends Component {
 		this.clearInput();
 	}
 
-	editExpense = async index => {
-		// console.log( 'clicked EditExpense' )
-		try {
-			await axios.patch(`/expenses/${index}`);
-			this.refresh();
-		} catch ( e ) {
-			console.log( e )
-		}
-	}
-
 	removeExpense = async id => {
 		try {
 			await axios.delete( `/expenses/${id}` );
@@ -123,6 +113,24 @@ class BudgetApp extends Component {
 		})
 	}
 
+	editExpense = id => {
+		// This function will only be making edit fields visible.
+		console.log( 'clicked Edit expense' );
+
+	}
+
+	saveEditedItem = async id => {
+		console.log( 'clicked Save Edited Item' )
+		try {
+			await axios.patch(`/expenses/${id}`, {
+				expense: this.state.expense
+			});
+			this.refresh();
+		} catch ( e ) {
+			console.log( e ) 
+		}
+	}
+
 	// Income-related functions start.
 	incomeSave = async () => {
 		try {
@@ -156,6 +164,7 @@ class BudgetApp extends Component {
 					expense={this.state.expense}
 				/>
 				<ShowExpenses
+					saveEditedItem={this.saveEditedItem}
 					handleItemDescriptionChange={this.handleItemDescriptionChange}
 					handleItemCostChange={this.handleItemCostChange}
 					expenses={this.state.expenses}

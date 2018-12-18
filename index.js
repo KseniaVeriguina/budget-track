@@ -1,4 +1,4 @@
-'use strict'; 
+'use strict';
 
 const server = require('./api/server');
 const { PORT, MONGODB_URI } = require('./api/utils/constants');

@@ -1,6 +1,6 @@
-const express      = require('express');
+const express      = require( 'express' );
 const router       = express.Router();
-const expenseModel = require('../models/expense');
+const expenseModel = require( '../models/expense' );
 
 // GET /expenses
 router.route('/')
@@ -64,20 +64,32 @@ router.route('/:id') // url is based on id now, not index.
 
 	})
 
-// PATCH /expenses/{index}
-router.route('/:index')
-	.patch((req, res) => {
-		// 1. Grab the expense index from the url params.
-		// this is the same as writing index = req.params.index
-		const { index } = req.params
-		// 2. Splice the old expense out of the expenses array
-		const editedExpense = expenses[ index ];
-		// editedExpenseCostKey = editedExpense[Object.keys(editedExpense)[0]];
-		// editedExpenseCostKey = 
-		// 3. Respond with the updated list of todos
-		res.status( 202 ).send( {
-		  data: editedExpense // Send over just the deleted item.
-		} )
+// PATCH /expenses/{id}
+router.route('/:id')
+	.patch( async (req, res, next) => {
+		// 1. Grab the expense id from the url params.
+		// this is the same as writing id = req.params.id
+		const { id } = req.params
+		// 2. Grab the new expense item from the request body
+		const expenseItem = req.body.expense
+
+		try {
+			// 3. Find an item in database with matching ID.
+			const expenseInDb = await expenseModel.findById( id )
+			// 4. change that items description and cost.
+			expenseInDb.cost        = expenseItem.cost
+			expenseInDb.description = expenseItem.description
+			// 5. save the item again.
+			const doc = await expenseInDb.save()
+			// 6. send back response - updated item.
+			res.status( 201 ).send({
+				data: [doc] // even one item is sent as an array.
+			})
+		} catch (e) {
+			// 7. Send error to error handler
+			next( e )
+		}
+
 	})
 
 exports.router = router
