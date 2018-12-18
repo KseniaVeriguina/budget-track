@@ -19,26 +19,6 @@ import React, { Component } from 'react'
 		})
 	}
 
-	handleItemDescriptionChange = e => {
-		let expense = {
-			'description' : e.target.value,
-			'cost' : this.state.editedItem.cost,
-		}
-		this.setState({
-			editedItem : expense
-		})
-	}
-
-	handleItemCostChange = e => {
-		let expense = {
-			'description' : this.state.editedItem.description,
-			'cost' : e.target.value,
-		}
-		this.setState({
-			editedItem : expense
-		})
-	}
-
 	handleSaveEditedItem = () => {
 		// Hide the edit fields
 		this.setState({
@@ -46,6 +26,21 @@ import React, { Component } from 'react'
 		})
 		// Then save this item in db
 		this.props.saveEditedItem( this.props.id, this.state.editedItem )
+	}
+
+	handleInputChange = (e, property ) => {
+		let expense = {};
+		if ( 'cost' === property ) {
+				expense.description = this.state.editedItem.description;
+				expense.cost = e.target.value;
+		} else if ( 'description' === property ) {
+				expense.description = e.target.value;
+				expense.cost = this.state.editedItem.cost;
+		}
+
+		this.setState({
+			editedItem : expense
+		})
 	}
 
 	render() {
@@ -59,9 +54,9 @@ import React, { Component } from 'react'
 				{ this.state.showEditFields ?
 				<div className='edit-fields'>
 					<label>Description</label>
-					<input type="text" value={this.state.editedItem.description} className="expense-description" onChange={ (e) => this.handleItemDescriptionChange(e) } />
+					<input type="text" value={this.state.editedItem.description} className="expense-description" onChange={ (e) => this.handleInputChange( e, 'description' ) } />
 					<label>Cost</label>
-					<input type="text" value={this.state.editedItem.cost} className="expense-cost" onChange={ (e) => this.handleItemCostChange(e) } />
+					<input type="text" value={this.state.editedItem.cost} className="expense-cost" onChange={ (e) => this.handleInputChange( e, 'cost' ) } />
 					<button onClick={ () => this.handleSaveEditedItem() }>Save item chages</button>
 				</div>
 				: null }
