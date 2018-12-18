@@ -59,16 +59,6 @@ class BudgetApp extends Component {
 		this.clearInput();
 	}
 
-	removeExpense = async id => {
-		try {
-			await axios.delete( `/expenses/${id}` );
-			this.refresh();
-		} catch ( e ) {
-			console.log( e )
-		}
-	  
-	}
-
 	handleDescriptionChange = e => {
 		let expense = {
 			'description' : e.target.value,
@@ -91,39 +81,11 @@ class BudgetApp extends Component {
 
 	// Functions for editing single expense cost or description
 
-	handleItemDescriptionChange = e => {
-		console.log( 'item description change' )
-		let expense = {
-			'description' : e.target.value,
-			'cost' : this.state.expense.cost,
-		}
-		this.setState({
-			expense: expense
-		})
-	}
-
-	handleItemCostChange = e => {
-		console.log( 'item cost change' )
-		let expense = {
-			'description' : this.state.expense.description,
-			'cost' : e.target.value,
-		}
-		this.setState({
-			expense: expense
-		})
-	}
-
-	editExpense = id => {
-		// This function will only be making edit fields visible.
-		console.log( 'clicked Edit expense' );
-
-	}
-
-	saveEditedItem = async id => {
-		console.log( 'clicked Save Edited Item' )
+	// This may need to be moved to Expense.
+	saveEditedItem = async (id, expense ) => {
 		try {
 			await axios.patch(`/expenses/${id}`, {
-				expense: this.state.expense
+				expense: expense
 			});
 			this.refresh();
 		} catch ( e ) {
@@ -131,7 +93,23 @@ class BudgetApp extends Component {
 		}
 	}
 
+	removeExpense = async id => {
+		try {
+			await axios.delete( `/expenses/${id}` );
+			this.refresh();
+		} catch ( e ) {
+			console.log( e )
+		}
+	  
+	}
+
 	// Income-related functions start.
+	handleIncomeChange = e => {
+		this.setState({
+			income: e.target.value
+		})
+	}
+
 	incomeSave = async () => {
 		try {
 			await axios.post('/income', {
@@ -141,12 +119,6 @@ class BudgetApp extends Component {
 		} catch ( e ) {
 			console.log( e )
 		}
-	}
-
-	handleIncomeChange = e => {
-		this.setState({
-			income: e.target.value
-		})
 	}
 
 	render() {
@@ -169,7 +141,6 @@ class BudgetApp extends Component {
 					handleItemCostChange={this.handleItemCostChange}
 					expenses={this.state.expenses}
 					removeExpense={this.removeExpense}
-					editExpense={this.editExpense}
 				/>
 				<ShowRemainder
 					income={this.state.income}

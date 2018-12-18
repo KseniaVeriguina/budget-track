@@ -6,9 +6,6 @@ const { PORT, MONGODB_URI } = require('./api/utils/constants');
 // Require mongoose package
 const mongoose = require( 'mongoose' );
 
-// Grab our seeds function
-// const seeds = require('./seeds')
-
 mongoose
 	// Connects to database
 	.connect( MONGODB_URI )
@@ -16,7 +13,6 @@ mongoose
 	.then(() => {
 		// Log this response
 		console.log( `Successfully connected to: ${MONGODB_URI}` )
-		// seeds()
 	})
 	.catch(err => console.log(err.message))
 
