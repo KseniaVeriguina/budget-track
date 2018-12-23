@@ -8,8 +8,6 @@ const path       = require( 'path' );
 app.use( bodyParser.urlencoded( { extended: true } ) );
 app.use( bodyParser.json() );
 
-app.use( '/healthcheck', require( './routes/index' ).router );
-app.use( '/login', require( './routes/login' ).router );
 app.use( '/income', require( './routes/income' ).router );
 app.use( '/expenses', require( './routes/expenses' ).router );
 app.use( '/timestamp', require( './routes/timestamp' ).router );
