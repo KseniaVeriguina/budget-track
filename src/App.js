@@ -4,6 +4,7 @@ import ShowExpenses from './components/ShowExpenses';
 import AddExpense from './components/AddExpense';
 import ShowIncome from './components/ShowIncome';
 import ShowRemainder from './components/ShowRemainder';
+import SaveTimestamp from './components/SaveTimestamp';
 import axios from 'axios';
 
 class BudgetApp extends Component {
@@ -13,7 +14,8 @@ class BudgetApp extends Component {
 			description: '',
 			cost: 0
 		},
-		expenses: [] // Array of expenses.
+		expenses: [], // Array of expenses.
+		timestamp: 0
 	}
 
 	async componentDidMount() {
@@ -33,6 +35,7 @@ class BudgetApp extends Component {
 	}
 
 	refresh = async () => {
+		console.log( 'refreshing' );
 		try {
 			// 1. GET /expenses to get all expenses
 			const response = await axios.get( '/expenses' ) // any code after this will have to wait until this line is exacuted, when using await
@@ -41,6 +44,9 @@ class BudgetApp extends Component {
 			const response2 = await axios.get( '/income' ) // any code after this will have to wait until this line is exacuted, when using await
 			const income    = response2.data.data[0].income;
 			this.setState( { income } )
+			const response3 = await axios.get( '/timestamp' )
+			const timestamp = response3.data.data[0].timestamp;
+			this.setState( { timestamp } )
 		} catch ( e ) {
 			console.log( e );
 		}
@@ -121,6 +127,27 @@ class BudgetApp extends Component {
 		}
 	}
 
+	// Record the timestamp and save it in app state.
+	setTimeStamp = async () => {
+		// Get current timestamp
+		let currentTimestamp = new Date().getTime();
+		// Convert timestamp to seconds
+		currentTimestamp = Math.round( currentTimestamp / 1000 );
+		// Then add 30 days to it
+		const thirtyDays = 60 * 60 * 24 * 30;
+		// Add 30 days to current timestamp.
+		let thiryDaysFromNow = currentTimestamp + thirtyDays;
+		// Then make a post request to record it.
+		try {
+			await axios.post('/timestamp', {
+				timestamp: thiryDaysFromNow
+			})
+			this.refresh();
+		} catch ( e ) {
+			console.log( e )
+		}
+	}
+
 	render() {
 		return (
 			<div>
@@ -142,9 +169,13 @@ class BudgetApp extends Component {
 					expenses={this.state.expenses}
 					removeExpense={this.removeExpense}
 				/>
+				<SaveTimestamp
+					setTimeStamp={this.setTimeStamp}
+				/>
 				<ShowRemainder
 					income={this.state.income}
 					expenses={this.state.expenses}
+					timestamp={this.state.timestamp}
 				/>
 			</div>
 		);

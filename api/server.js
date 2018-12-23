@@ -1,17 +1,18 @@
 'use strict';
 
-const bodyParser = require('body-parser');
-const express    = require('express');
+const bodyParser = require( 'body-parser' );
+const express    = require( 'express' );
 const app        = express();
 const path       = require( 'path' );
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use( bodyParser.urlencoded( { extended: true } ) );
+app.use( bodyParser.json() );
 
-app.use('/healthcheck', require('./routes/index').router);
-app.use('/login', require('./routes/login').router);
-app.use('/income', require('./routes/income').router);
-app.use('/expenses', require('./routes/expenses').router);
+app.use( '/healthcheck', require( './routes/index' ).router );
+app.use( '/login', require( './routes/login' ).router );
+app.use( '/income', require( './routes/income' ).router );
+app.use( '/expenses', require( './routes/expenses' ).router );
+app.use( '/timestamp', require( './routes/timestamp' ).router );
 
 
 app.use((err, req, res, next) => {

@@ -8,9 +8,9 @@
  * token to access the protected endpoints of our API.
  */
 
-const jwt = require('jsonwebtoken');
-const express = require('express');
-const router = express.Router();
+const jwt        = require('jsonwebtoken');
+const express    = require('express');
+const router     = express.Router();
 const { SECRET } = require('../utils/constants');
 
 router.route('/')

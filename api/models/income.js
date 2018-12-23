@@ -1,12 +1,12 @@
-// This is a model for each expense item
+// This is a model for income item
 
 // Require mongoose
 const mongoose = require('mongoose')
 
-// Create expense schema
+// Create income schema
 const incomeSchema = new mongoose.Schema({
 	income: Number
 })
 
-// export expense schema
+// export income schema
 module.exports = mongoose.model( 'Income', incomeSchema )
