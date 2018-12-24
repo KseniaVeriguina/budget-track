@@ -12,6 +12,9 @@ app.use( '/income', require( './routes/income' ).router );
 app.use( '/expenses', require( './routes/expenses' ).router );
 app.use( '/timestamp', require( './routes/timestamp' ).router );
 
+app.use( '/login', require( './routes/login' ).router );
+app.use( '/signup', require( './routes/signup' ).router );
+
 
 app.use((err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {

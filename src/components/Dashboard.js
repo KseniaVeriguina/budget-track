@@ -10,7 +10,7 @@ import Logout from './Logout';
 
 class Dashboard extends Component {
 	state = {
-		income: 0, // Number
+		income: '', // Number
 		expense: {
 			description: '',
 			cost: 0
@@ -44,7 +44,9 @@ class Dashboard extends Component {
 			this.setState( { expenses } ) // Syntactical sugar to set expenses: expenses
 			const response2 = await axios.get( '/income' ) // any code after this will have to wait until this line is exacuted, when using await
 			const income    = response2.data.data[0].income;
-			this.setState( { income } )
+			if ( ! null === income ) {
+				this.setState( { income } )
+			}
 			const response3 = await axios.get( '/timestamp' )
 			const timestamp = response3.data.data[0].timestamp;
 			this.setState( { timestamp } )

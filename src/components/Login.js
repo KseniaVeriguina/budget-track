@@ -17,8 +17,10 @@ class Login extends Component {
     const { email, password } = this.state;
     // 1. POST to /auth/login, passing in the email and password in the body
     try {
-      const res   = await axios.post( '/auth/login', { email, password } )
-      const token = res.data.token
+      const res   = await axios.post( '/login', { email, password } )
+      this.props.setUser( res.data )
+      console.log( res.data )
+      // const token = res.data.token
       // setToken( token )
     } catch (e) {
       console.log( e )

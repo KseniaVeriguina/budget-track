@@ -11,7 +11,7 @@ import Signup from './components/Signup';
 
 class BudgetApp extends Component {
 	state = {
-	  user: 'hello' // {} if you add empty object, its a truthie, so it thinks there is a user and you can see the dashboard
+	  user: null // {} if you add empty object, its a truthie, so it thinks there is a user and you can see the dashboard
 	}
 
 	setUser = user => {
@@ -38,7 +38,7 @@ class BudgetApp extends Component {
 				      this.state.user ?
 				        <Redirect to="/" />
 				      :
-				        <Login/>
+				        <Login setUser={this.setUser} />
 				    )}
 				  />
 				  <Route

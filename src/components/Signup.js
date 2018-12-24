@@ -17,7 +17,7 @@ class Signup extends Component {
     const { email, password } = this.state
     // 2. POST them to our API
     try {
-      const res = await axios.post('/auth/signup', {
+      const res = await axios.post('/signup', {
         email, password
       })
       this.props.setUser( res.data )
