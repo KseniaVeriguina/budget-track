@@ -1,39 +1,22 @@
-const jwt          = require( 'jsonwebtoken' )
-const config       = require( '../config.json' )
 const tokenService = require( '../utils/tokenService' )
 
-const issueToken = async (req, res, next) => {
-  const { password } = req.body
-  const { user }     = req
-  const match        = user.comparePassword(password)
+module.exports = async ( req, res, next ) => {
+  // get the authorization header from the request
+  const authHeader = req.get( 'Authorization' )
 
-  if (match) {
-    req.token = tokenService.create(user)
-    next()
-  } else {
-    next(new Error('unauthorized'))
-  }
-}
+  // declare token, but don't run split function until authHeader is checked.
+  let token 
 
-const verifyToken = async (req, res, next) => {
-  const authHeader = req.get('authorization')
+  // if no auth header present, send back a 401
+  if ( ! authHeader ) return next( new Error( 'unauthorized' ))
 
-  if (!authHeader) {
-    next(new Error('unauthorized'))
-  }
-  const token = authHeader.split(' ')[1] // grab just the token
+  token = authHeader.split(" ")[1]
+
   try {
-    const decoded = await jwt.verify(token, config.secret)
-    if (decoded) {
-      req.decoded = decoded
-    }
+    const decoded = await tokenService.verify( token )
+    req.token     = decoded
     next()
   } catch (e) {
-    next(e)
+    next( new Error( 'unauthorized' ) )
   }
-}
-
-module.exports = {
-  issueToken,
-  verifyToken
 }
