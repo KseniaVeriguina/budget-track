@@ -1,7 +1,8 @@
 // routes/login.js
-const express = require( 'express' );
-const router  = express.Router();
-const User    = require( '../models/user' )
+const express      = require( 'express' );
+const router       = express.Router();
+const User         = require( '../models/user' )
+const tokenService = require( '../utils/tokenService' )
 
 router.post('/', async (req, res, next) => {
     // retrieve user and password from body
@@ -11,15 +12,16 @@ router.post('/', async (req, res, next) => {
       const user = await User.findOne({ email })
 
       // no match, send back a not found error
-      if (!user) return next(new Error('not found'))
+      if ( ! user ) return next(new Error('not found'))
 
       // compare a user's hash to the password sent in the HTTP request body
       const match = await user.comparePassword(password)
 
       // if they match
-      if (match) {
+      if ( match ) {
+        const token = tokenService.create(user) // <-- add this line
         // send back the user
-        res.status(200).send({ data: [user] })
+        res.status(200).send( { data: [token] } ) // <-- send back token
       } else {
         // no match, send back a 401
         next(new Error('unauthorized'))

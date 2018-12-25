@@ -14,6 +14,7 @@ app.use( '/timestamp', require( './routes/timestamp' ).router );
 
 app.use( '/login', require( './routes/login' ).router );
 app.use( '/signup', require( './routes/signup' ).router );
+app.use( '/users', require( './routes/users' ).router);
 
 
 app.use((err, req, res, next) => {

@@ -1,17 +1,21 @@
-const jwt    = require( 'jsonwebtoken' )
-const config = require( '../config.json' )
+const { SECRET } = require( './constants' )
+const jwt        = require( 'jsonwebtoken' )
 
 const create = user => {
-  const { _id } = user
+  const id = user._id
+
   const payload = {
     user: {
-      id: _id
+      id
     }
   }
 
-  return jwt.sign( payload, config.secret )
+  return jwt.sign( payload, SECRET )
 }
 
+const verify = token => jwt.verify( token, SECRET )
+
 module.exports = {
-  create
+  create,
+  verify
 }
